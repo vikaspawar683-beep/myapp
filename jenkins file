@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven-3.9'
+        jdk 'JDK-11'
+    }
+
+    environment {
+        IMAGE_NAME = "myapp"
+        IMAGE_TAG  = "1.0"
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/USERNAME/REPO_NAME.git'
+            }
+        }
+
+        stage('Maven Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                sh '''
+                docker stop myapp-container || true
+                docker rm myapp-container || true
+                docker run -d -p 8080:8080 --name myapp-container $IMAGE_NAME:$IMAGE_TAG
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build & Deployment Successful'
+        }
+        failure {
+            echo '❌ Build Failed'
+        }
+    }
+}
