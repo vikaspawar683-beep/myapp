@@ -1,2 +1,0 @@
-# myapp
-mven and docker
