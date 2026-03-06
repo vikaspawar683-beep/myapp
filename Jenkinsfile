@@ -2,16 +2,15 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven-3.9'
-        jdk 'JDK-11'
+        maven 'Maven'
+        jdk 'JDK'
     }
 
     stages {
 
         stage('Checkout from GitHub') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/vikaspawar683-beep/myapp.git'
+                git 'https://github.com/vikaspawar683-beep/myapp.git'
             }
         }
 
@@ -30,11 +29,12 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 sh '''
-                docker rm -f myapp-container || true
+                docker stop myapp-container || true
+                docker rm myapp-container || true
                 docker run -d -p 8081:8080 --name myapp-container myapp:1.0
                 '''
             }
         }
+
     }
 }
-
