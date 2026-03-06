@@ -1,9 +1,10 @@
+```groovy
 pipeline {
     agent any
 
     tools {
-        maven 'maven-3'
-        jdk 'jdk11'
+        maven 'Maven-3.9'
+        jdk 'JDK-11'
     }
 
     stages {
@@ -37,3 +38,5 @@ pipeline {
         }
     }
 }
+```
+
