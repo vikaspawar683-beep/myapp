@@ -31,7 +31,7 @@ pipeline {
             steps {
                 sh '''
                 docker rm -f myapp-container || true
-                docker run -d -p 8080:8080 --name myapp-container myapp:1.0
+                docker run -d -p 8081:8080 --name myapp-container myapp:1.0
                 '''
             }
         }
